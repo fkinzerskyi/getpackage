@@ -1,0 +1,106 @@
+<div class="order-container" [attr.dir]="dir()">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-card>
+
+      <mat-card-title>
+        {{ lang() === 'en' ? 'Order Delivery' : 'שליחת משלוח' }}
+      </mat-card-title>
+
+      <mat-card-content>
+
+        <!-- Sender Info -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Sender Name' : 'שם שולח' }}</mat-label>
+          <input matInput formControlName="senderName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Sender Phone' : 'טלפון שולח' }}</mat-label>
+          <input matInput formControlName="senderPhone" />
+          <mat-error *ngIf="form.get('senderPhone')?.invalid">
+            {{ lang() === 'en' ? 'Phone must start with 05' : 'מספר טלפון לא תקין' }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Pickup Address' : 'כתובת איסוף' }}</mat-label>
+          <input matInput formControlName="pickupAddress" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Pickup City' : 'עיר איסוף' }}</mat-label>
+          <mat-select formControlName="pickupCity">
+            <mat-option
+              *ngFor="let c of cities()"
+              [value]="c.enName">
+              {{ lang() === 'en' ? (c.enName | cityFormat) : c.heName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Receiver Info -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Receiver Name' : 'שם נמען' }}</mat-label>
+          <input matInput formControlName="receiverName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Receiver Phone' : 'טלפון נמען' }}</mat-label>
+          <input matInput formControlName="receiverPhone" />
+          <mat-error *ngIf="form.get('receiverPhone')?.invalid">
+            {{ lang() === 'en' ? 'Phone must start with 05' : 'מספר טלפון לא תקין' }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Drop-off Address' : 'כתובת יעד' }}</mat-label>
+          <input matInput formControlName="dropOffAddress" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Drop-off City' : 'עיר יעד' }}</mat-label>
+          <mat-select formControlName="dropOffCity">
+            <mat-option
+              *ngFor="let c of cities()"
+              [value]="c.enName">
+              {{ lang() === 'en' ? (c.enName | cityFormat) : c.heName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Date & Time -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Delivery Date' : 'תאריך משלוח' }}</mat-label>
+          <input matInput [matDatepicker]="picker"
+                 formControlName="deliveryDate"
+                 [matDatepickerFilter]="dateFilter" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="today"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>{{ lang() === 'en' ? 'Delivery Time' : 'שעת משלוח' }}</mat-label>
+          <mat-select formControlName="deliveryTime">
+            <mat-option *ngFor="let t of filteredTimes()" [value]="t">
+              {{ t }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Price -->
+        <div class="price-display">
+          <strong>{{ lang() === 'en' ? 'Price (incl. VAT)' : 'מחיר כולל מע"מ' }}:</strong>
+          {{ price() }} ₪
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+          {{ lang() === 'en' ? 'Submit Order' : 'שלח הזמנה' }}
+        </button>
+      </mat-card-actions>
+
+    </mat-card>
+  </form>
+</div>

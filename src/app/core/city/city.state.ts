@@ -2,6 +2,7 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { fetchCities } from './city.actions';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {tap} from 'rxjs';
 
 export interface City {
   enName: string;
@@ -30,8 +31,8 @@ export class CityState {
 
   @Action(fetchCities)
   fetchCities(ctx: StateContext<CityStateModel>) {
-    return this.http.get<City[]>('http://localhost:3000/cities').subscribe(res => {
-      ctx.patchState({ cities: res });
-    });
+    return this.http.get<City[]>('http://localhost:3000/cities').pipe(
+      tap(res => ctx.patchState({ cities: res }))
+    );
   }
 }
